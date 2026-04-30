@@ -1,0 +1,18 @@
+{
+    "home": "Home",
+    "about": "About Us",
+    "service": "Services",
+    "project": "Projects",
+    "blog": "Blog",
+    "contact": "Contact Us",
+    "metadata": {
+        "title": "Active4Web | Professional Web & App Development",
+        "description": "Active4Web provides high-quality web and mobile app development services, focusing on innovation and user experience."
+    },
+    "welcome": {
+        "sub": "Experience The Best Webdesign",
+        "title": "What We Can Do For You",
+        "desc": "Website design and development, smartphone application design and development, online stores, and digital marketing campaigns.",
+        "more": "Show More"
+    }
+}

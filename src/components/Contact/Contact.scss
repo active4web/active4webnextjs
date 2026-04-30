@@ -1,0 +1,158 @@
+.contact {
+    padding-bottom: 80px;
+
+    >.container {
+        display: flex;
+        align-items: stretch;
+        padding-top: 80px;
+        padding-bottom: 50px;
+
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            inset-inline-end: 0;
+            top: 0;
+            height: 100%;
+            width: 300px;
+            background-color: var(--secondary_color);
+        }
+
+        >div {
+            width: calc(100% / 2 - 15px);
+        }
+
+        .form {
+            form {
+                margin-top: 30px;
+                display: flex;
+                flex-direction: column;
+                gap: 15px;
+
+                input,
+                textarea {
+                    padding: 10px;
+                    outline: none;
+                    border: 1px solid var(--secondary_color);
+                    font-size: 15px;
+                    border-radius: 7px;
+                    caret-color: var(--secondary_color);
+                }
+
+                textarea {
+                    height: 160px;
+                    resize: none;
+                }
+
+                button {
+                    padding-block: 10px;
+                    font-size: 16px;
+                    border: none;
+                    background-color: var(--secondary_color);
+                    color: #FFF;
+                    cursor: pointer;
+                    border-radius: 7px;
+                }
+            }
+        }
+
+        .map {
+            position: relative;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            iframe {
+                width: 500px;
+                height: 100%;
+            }
+        }
+    }
+
+    .contact-text {
+        .container {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+
+            .group {
+                display: flex;
+                align-items: center;
+                gap: 20px;
+
+                .box {
+                    display: flex;
+                    align-items: center;
+                    gap: 10px;
+
+                    .image {
+                        display: flex;
+                        align-items: center;
+                        justify-content: center;
+                    }
+
+                    >p {
+                        font-size: 17px;
+                        font-weight: bold;
+                    }
+                }
+            }
+
+        }
+    }
+}
+
+@media (max-width: 991px) {
+    .contact {
+
+        >.container {
+            flex-direction: column-reverse;
+            gap: 50px;
+
+            &::before {
+                display: none;
+            }
+
+            >div {
+                width: 100%;
+            }
+
+            .form {
+                form {
+                    button {
+                        padding-top: 16px;
+                    }
+                }
+            }
+
+            .map {
+                iframe {
+                    height: 300px;
+                }
+            }
+        }
+
+        .contact-text {
+            .container {
+                flex-direction: column;
+
+                .group {
+                    flex-direction: column-reverse;
+                    align-items: flex-start;
+
+                    &:last-of-type {
+                        flex-direction: column !important;
+
+                        .box {
+                            >p {
+                                line-height: 1.7;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

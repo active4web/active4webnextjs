@@ -1,0 +1,27 @@
+.head-sec {
+    text-align: center;
+    position: relative;
+
+    h2 {
+        font-size: clamp(20px, 4vw, 37px);
+        position: relative;
+        z-index: 2;
+        color: var(--main_color);
+    }
+
+    span {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        z-index: 1;
+        transform: translate(-50%, -57%);
+        font-size: clamp(35px, 5vw, 75px);
+        font-weight: bold;
+        text-transform: uppercase;
+        display: block;
+        width: 100%;
+        color: transparent;
+        -webkit-text-stroke: 1.5px #eeeeeed0;
+        padding-inline: 10px;
+    }
+}

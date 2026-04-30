@@ -1,0 +1,39 @@
+.marquee {
+    padding-block: 12px;
+    background-color: var(--main_color);
+
+    .box-group {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #FFF;
+    }
+
+    .box {
+        padding-inline: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+
+        p {
+            font-size: 20px;
+            font-weight: bold;
+        }
+
+        img {
+            width: 25px;
+            height: 25px;
+            object-fit: contain;
+        }
+    }
+}
+
+@media (max-width: 767px) {
+    .marquee {
+        .box {
+            p {
+                padding-top: 5px;
+            }
+        }
+    }
+}

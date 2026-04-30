@@ -1,0 +1,130 @@
+.footer {
+    background-color: var(--therd_color);
+    padding-block: 50px;
+
+    .container {
+        .top {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            grid-template-areas: "about about links1 links2 logo";
+
+            .row {
+                h4 {
+                    font-size: clamp(19px, 4vw, 16px);
+                    margin-bottom: 8px;
+                }
+
+                ul {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 8px;
+
+                    a {
+                        font-weight: 500;
+                    }
+                }
+
+                &:first-of-type {
+                    grid-area: about;
+
+                    p {
+                        width: 400px;
+                        line-height: 1.7;
+                    }
+                }
+
+                &:nth-of-type(2) {
+                    grid-area: links1;
+                }
+
+                &:nth-of-type(2) {
+                    grid-area: links2;
+                }
+
+                &:last-of-type {
+                    grid-area: logo;
+
+                    .social {
+                        display: flex;
+                        align-items: center;
+                        gap: 13px;
+                        margin-top: 20px;
+
+                        a {
+                            display: flex;
+                            align-items: center;
+                        }
+                    }
+                }
+            }
+        }
+
+        .bottom {
+            margin-top: 35px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+
+            .rights {
+                font-weight: 700;
+            }
+
+            .static {
+                display: flex;
+                align-items: center;
+
+                a {
+                    padding-inline: 8px;
+                }
+
+                a:nth-of-type(2) {
+                    border-inline-start: 1px solid #3F3F3F;
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 1000px) {
+    .footer {
+        .container {
+            .top {
+                display: flex !important;
+                flex-direction: column-reverse;
+                gap: 25px;
+
+                .row {
+                    text-align: center;
+                    grid-area: unset !important;
+
+                    p {
+                        width: 100% !important;
+                    }
+
+                    .social {
+                        justify-content: center;
+                    }
+                }
+            }
+
+            .bottom {
+                flex-direction: column-reverse;
+                gap: 13px;
+                text-align: center;
+
+                .rights {
+                    line-height: 1.7;
+                }
+
+                .static {
+                    flex-direction: column;
+                    gap: 12px;
+
+                    a {
+                        border: none !important;
+                    }
+                }
+            }
+        }
+    }
+}

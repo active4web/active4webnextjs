@@ -1,0 +1,92 @@
+html[lang="en"] {
+
+    *,
+    input,
+    button,
+    textarea,
+    select {
+        font-family: var(--font-en);
+    }
+
+    direction: ltr;
+}
+
+html[lang="ar"] {
+
+    *,
+    input,
+    button,
+    textarea,
+    select {
+        font-family: var(--font-ar);
+    }
+
+    direction: rtl;
+    --gradient-dir: to left;
+}
+
+:root {
+    --main_color: #33A1E0;
+    --secondary_color: #1991D7;
+    --therd_color: #B4E4FF;
+    --gradient-dir: to right;
+}
+
+*,
+input,
+button,
+textarea,
+select {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    list-style: none;
+    outline: none;
+    text-decoration: none;
+}
+
+body,
+a {
+    color: #444;
+}
+
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: var(--main_color);
+}
+
+::-webkit-scrollbar-track {
+    background-color: #FFF;
+}
+
+.container {
+    margin-inline: auto;
+    padding-inline: 20px;
+    width: 100%;
+    max-width: 1300px;
+
+    @media (max-width: 1200px) {
+        max-width: 1140px;
+    }
+
+    @media (max-width: 992px) {
+        max-width: 960px;
+    }
+
+    @media (max-width: 768px) {
+        max-width: 720px;
+    }
+
+    @media (max-width: 576px) {
+        max-width: 100%;
+    }
+}
+
+@media (max-width : 991px) {
+    * {
+        cursor: auto !important;
+    }
+}

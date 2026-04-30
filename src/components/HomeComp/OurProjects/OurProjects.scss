@@ -1,0 +1,29 @@
+.our-projects {
+    padding-top: 60px;
+
+    >p {
+        text-align: center;
+        font-size: clamp(17px, 4vw, 25px);
+        margin-top: 22px;
+        font-weight: bold;
+    }
+
+    .slider-categories {
+        margin-top: 50px;
+    }
+
+    .show-more {
+        display: block;
+        width: 200px;
+        margin-top: 40px;
+        margin-inline: auto;
+        padding-block: 10px;
+        font-size: 16px;
+        border: none;
+        background-color: var(--main_color);
+        color: #FFF;
+        cursor: pointer;
+        text-align: center;
+        border-radius: 10px;
+    }
+}

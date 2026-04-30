@@ -1,0 +1,203 @@
+html[dir="rtl"] {
+    .header {
+        .head {
+            .links {
+                gap: 19px;
+                font-size: 17px;
+            }
+        }
+    }
+}
+
+.header {
+    height: 109px;
+    position: sticky;
+    top: 0;
+    z-index: 8;
+
+    .bar {
+        background-color: var(--therd_color);
+        padding-block: 8px;
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .contact-bar,
+        .social {
+            display: flex;
+            align-items: center;
+            gap: 13px;
+        }
+
+        .contact-bar {
+            .box {
+                display: flex;
+                align-items: center;
+                gap: 5px;
+                font-size: 15px;
+
+                img {
+                    width: 15px;
+                    height: 15px;
+                }
+            }
+        }
+
+        .social {
+            a {
+                display: flex;
+                align-items: center;
+
+                img {
+                    width: 18px;
+                    height: 18px;
+                }
+            }
+        }
+    }
+
+    .head {
+        padding-block: 10px;
+        background-color: aliceblue;
+
+        .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+
+            .logo {
+                display: flex;
+                align-items: center;
+            }
+
+            nav {
+                .box {
+                    .links {
+                        display: flex;
+                        align-items: center;
+                        gap: 24px;
+                        font-size: 18px;
+                        font-weight: 500;
+
+                        .active {
+                            color: var(--main_color);
+                        }
+                    }
+
+                    .contact {
+                        display: none;
+                    }
+                }
+            }
+
+            .icons {
+                display: flex;
+                align-items: center;
+                gap: 10px;
+
+                button {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    width: 35px;
+                    height: 35px;
+                    background-color: var(--main_color);
+                    color: #FFF;
+                    border: none;
+                    border-radius: 10px;
+                    cursor: pointer;
+
+                    &.lang {
+                        font-size: 18px;
+                    }
+
+                    svg {
+                        width: 20px;
+                        height: 20px;
+                    }
+
+                    &.menu {
+                        display: none;
+                    }
+                }
+            }
+        }
+    }
+}
+
+@media (max-width: 850px) {
+    .header {
+        .bar {
+            .container {
+                justify-content: center;
+            }
+
+            .contact-bar {
+                display: none;
+            }
+        }
+
+        .head {
+            nav {
+                position: fixed;
+                width: 100%;
+                height: 100vh;
+                top: 0;
+                display: flex;
+                justify-content: flex-start;
+                inset-inline-start: -100%;
+                transition: all 0.3s ease-in-out;
+                z-index: 5;
+
+                &.active-menu {
+                    inset-inline-start: 0;
+                }
+
+                >.box {
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: center;
+                    align-items: center;
+                    width: 200px;
+                    height: 100vh;
+                    background-color: var(--main_color);
+
+                    .links {
+                        flex-direction: column;
+
+                        .active,
+                        a {
+                            color: #FFF !important;
+                        }
+                    }
+
+                    .contact {
+                        display: flex !important;
+                        flex-direction: column;
+                        gap: 15px;
+                        color: #FFF;
+                        margin-top: 40px;
+
+                        .box {
+                            img {
+                                display: none;
+                            }
+                        }
+                    }
+                }
+
+            }
+
+            .icons {
+                button {
+                    &.menu {
+                        display: flex !important;
+                    }
+                }
+            }
+        }
+    }
+}
