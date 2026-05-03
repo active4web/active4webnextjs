@@ -13,7 +13,7 @@ export interface IBlog {
     description_en: string;
     details_ar?: string;
     details_en?: string;
-    created_date: string; // التأكد من مطابقة مسمى الـ API
+    created_date?: string; // التأكد من مطابقة مسمى الـ API
 }
 
 interface BlogProps {
