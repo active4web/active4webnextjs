@@ -14,65 +14,48 @@ import HeadSec from "@/components/HeadSec/HeadSec";
 import OurTeamSlider from "@/components/OurTeamSlider/OurTeamSlider";
 import Statistics from "@/components/Statistics/Statistics";
 
-
-export async function generateMetadata(): Promise<Metadata> {
-    const locale = await getLocale();
+export async function generateMetadata({ params }: {
+    params: Promise<{ id: string, locale: string }>
+}): Promise<Metadata> {
+    const { locale } = await params;
     const isAr = locale === "ar";
 
-    const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-    const pageTitle = isAr ? "من نحن" : "About Us";
+    try {
+        const res = await fetch(`https://api.active4web.com/dashboard/section/about`);
+        const result = await res.json();
+        const data = result?.data?.[0];
 
-    return {
-        // استخدام الـ template عشان يظهر: من نحن | أكتيف فور ويب
-        title: pageTitle,
+        const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
 
-        description: isAr
-            ? "تعرف على شركة أكتيف فور ويب، شركة متخصصة في تطوير المواقع والتطبيقات تقدم حلول برمجية عالية الجودة وتصاميم مبتكرة ودعم عملاء متميز."
-            : "Learn more about Active4Web, a professional web and app development company dedicated to delivering high-quality software solutions, innovative designs, and excellent customer support.",
+        return {
+            title: (isAr ? data?.meta_title_ar : data?.meta_title_en) || siteName,
+            description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+            keywords: isAr ? data?.meta_keywords_ar : data?.meta_keywords_en,
 
-        keywords: isAr
-            ? [
-                "من نحن أكتيف فور ويب", "عن الشركة", "تطوير مواقع",
-                "تطوير تطبيقات موبايل", "حلول برمجية", "أكتيف فور ويب",
-                "شركة برمجة في مصر", "خدمات تقنية"
-            ]
-            : [
-                "about Active4Web", "our company", "web development company",
-                "app development", "software solutions", "UX/UI design",
-                "professional services Egypt", "Active4Web mission"
-            ],
-
-        openGraph: {
-            title: isAr ? `من نحن - ${siteName}` : `About Us - ${siteName}`,
-            description: isAr
-                ? "دليلك لتطوير حلول برمجية ومواقع ذكية تواكب العصر. تعرف على فريقنا ومهمتنا."
-                : "Your guide to developing smart software solutions. Learn more about our team and mission.",
-            url: `https://active4web.com/${locale}/about`,
-            siteName: siteName,
-            locale: isAr ? 'ar_EG' : 'en_US',
-            type: 'website',
-            images: [
-                {
-                    url: '/images/about-og.jpg', // تأكد من وجود صورة بهذا المسار أو غيره
-                    width: 1200,
-                    height: 630,
-                    alt: isAr ? "عن أكتيف فور ويب" : "About Active4Web",
-                },
-            ],
-        },
-
-        alternates: {
-            languages: {
-                'ar-EG': '/ar/about',
-                'en-US': '/en/about',
+            openGraph: {
+                title: isAr ? data?.meta_title_ar : data?.meta_title_en,
+                description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
+                type: 'website',
             },
-        },
 
-        robots: {
-            index: true,
-            follow: true,
-        }
-    };
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/about`,
+                    'en-US': `/en/about`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
+        };
+    } catch {
+        return { title: isAr ? "تفاصيل المشروع" : "Project Details" };
+    }
 }
 
 const AboutPage = async () => {

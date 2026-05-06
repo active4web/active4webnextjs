@@ -18,7 +18,7 @@ export interface IBlog {
     description_en: string;
     details_ar?: string;
     details_en?: string;
-    created_date: string; // وحدنا المسمى هنا
+    created_date: string;
 }
 
 // --- 2. SEO Metadata الديناميكي ---
@@ -33,19 +33,35 @@ export async function generateMetadata({
     try {
         const res = await fetch(`https://api.active4web.com/api/articles/show/${id}`);
         const result = await res.json();
-        const blog = result?.data as IBlog;
+        const blog = result?.data;
 
         const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-        const title = isAr ? blog?.name_ar : blog?.name_en;
 
         return {
-            title: `${title} | ${siteName}`,
-            description: isAr ? blog?.description_ar : blog?.description_en,
+            title: (isAr ? blog?.meta_title_ar : blog?.meta_title_en) || siteName,
+            description: isAr ? blog?.meta_description_ar : blog?.meta_description_en,
+            keywords: isAr ? blog?.meta_keywords_ar : blog?.meta_keywords_en,
+
             openGraph: {
-                title: title,
-                images: [blog?.image],
+                title: isAr ? blog?.meta_title_ar : blog?.meta_title_en,
+                description: isAr ? blog?.meta_description_ar : blog?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
                 type: 'article',
             },
+
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/blogs/blog-details/${id}`,
+                    'en-US': `/en/blogs/blog-details/${id}`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
         };
     } catch {
         return { title: isAr ? "تفاصيل المقال" : "Blog Details" };

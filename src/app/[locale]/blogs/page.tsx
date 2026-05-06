@@ -7,37 +7,48 @@ import HeadPage from "@/components/HeadPage/HeadPage";
 import OurBlogs from "@/components/OurBlogs/OurBlogs";
 import Testimonials from "@/components/Testimonials/Testimonials";
 
-// --- 1. SEO Metadata (Server Side) ---
-export async function generateMetadata(): Promise<Metadata> {
-    const locale = await getLocale();
+export async function generateMetadata({ params }: {
+    params: Promise<{ id: string, locale: string }>
+}): Promise<Metadata> {
+    const { locale } = await params;
     const isAr = locale === "ar";
 
-    const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-    const pageTitle = isAr ? "المقالات" : "Blog";
+    try {
+        const res = await fetch(`https://api.active4web.com/dashboard/section/blogs`);
+        const result = await res.json();
+        const data = result?.data?.[0];
 
-    return {
-        title: pageTitle,
-        description: isAr
-            ? "اطّلع على أحدث مقالات أكتيف فور ويب في تطوير المواقع، البرمجة، تصميم UI/UX، تحسين محركات البحث (SEO)، والحلول الرقمية الحديثة."
-            : "Read the latest articles from Active4Web about web development, programming tips, UI UX design, SEO strategies, and modern digital solutions.",
-        keywords: isAr
-            ? ["مقالات أكتيف فور ويب", "مدونة برمجة", "مقالات تطوير مواقع", "نصائح UI UX", "مقالات SEO"]
-            : ["Active4Web blog", "web development articles", "programming blog", "UI UX tips", "SEO articles"],
-        alternates: {
-            languages: {
-                'ar-EG': '/ar/blogs',
-                'en-US': '/en/blogs',
+        const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
+
+        return {
+            title: (isAr ? data?.meta_title_ar : data?.meta_title_en) || siteName,
+            description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+            keywords: isAr ? data?.meta_keywords_ar : data?.meta_keywords_en,
+
+            openGraph: {
+                title: isAr ? data?.meta_title_ar : data?.meta_title_en,
+                description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
+                type: 'website',
             },
-        },
-        openGraph: {
-            title: `${pageTitle} | ${siteName}`,
-            description: isAr ? "دليلك للتقنية والبرمجة الحديثة" : "Your guide to modern tech and programming",
-            url: `https://active4web.com/${locale}/blogs`,
-            siteName: siteName,
-            locale: isAr ? 'ar_EG' : 'en_US',
-            type: 'website',
-        },
-    };
+
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/blogs`,
+                    'en-US': `/en/blogs`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
+        };
+    } catch {
+        return { title: isAr ? "تفاصيل المشروع" : "Project Details" };
+    }
 }
 
 // --- 2. Page Component ---

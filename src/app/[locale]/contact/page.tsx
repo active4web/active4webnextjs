@@ -9,37 +9,48 @@ import OurBlogs from "@/components/OurBlogs/OurBlogs";
 import Testimonials from "@/components/Testimonials/Testimonials";
 import OurClient from "@/components/OurClient/OurClient";
 
-// --- 1. SEO Metadata ---
-export async function generateMetadata(): Promise<Metadata> {
-    const locale = await getLocale();
+export async function generateMetadata({ params }: {
+    params: Promise<{ id: string, locale: string }>
+}): Promise<Metadata> {
+    const { locale } = await params;
     const isAr = locale === "ar";
 
-    const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-    const pageTitle = isAr ? "تواصل معنا" : "Contact Us";
+    try {
+        const res = await fetch(`https://api.active4web.com/dashboard/section/contact`);
+        const result = await res.json();
+        const data = result?.data?.[0];
 
-    return {
-        title: pageTitle,
-        description: isAr
-            ? "تواصل مع أكتيف فور ويب للاستفسار عن خدمات تطوير المواقع والتطبيقات، طلبات المشاريع، والاستشارات التقنية والحلول الرقمية الاحترافية."
-            : "Get in touch with Active4Web for web and app development services, project inquiries, consultations, and professional digital solutions.",
-        keywords: isAr
-            ? ["تواصل مع أكتيف فور ويب", "اتصل بنا", "شركة تطوير مواقع", "تطوير تطبيقات", "حلول رقمية"]
-            : ["Contact Active4Web", "contact us", "web development services", "app development company", "business inquiries"],
-        alternates: {
-            languages: {
-                'ar-EG': '/ar/contact',
-                'en-US': '/en/contact',
+        const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
+
+        return {
+            title: (isAr ? data?.meta_title_ar : data?.meta_title_en) || siteName,
+            description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+            keywords: isAr ? data?.meta_keywords_ar : data?.meta_keywords_en,
+
+            openGraph: {
+                title: isAr ? data?.meta_title_ar : data?.meta_title_en,
+                description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
+                type: 'website',
             },
-        },
-        openGraph: {
-            title: `${pageTitle} | ${siteName}`,
-            description: isAr ? "نحن هنا لمساعدتك في بناء مشروعك الرقمي القادم." : "We are here to help you build your next digital project.",
-            url: `https://active4web.com/${locale}/contact`,
-            siteName: siteName,
-            locale: isAr ? 'ar_EG' : 'en_US',
-            type: 'website',
-        },
-    };
+
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/contact`,
+                    'en-US': `/en/contact`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
+        };
+    } catch {
+        return { title: isAr ? "تفاصيل المشروع" : "Project Details" };
+    }
 }
 
 const ContactPage = async () => {

@@ -26,7 +26,7 @@ export interface IService {
     name_en: string;
     description_ar: string;
     description_en: string;
-    infos: IServiceInfo[]; // مصفوفة من النوع اللي عرفناه فوق
+    infos: IServiceInfo[];
 }
 
 // --- 1. الديناميك SEO Metadata ---
@@ -44,16 +44,32 @@ export async function generateMetadata({
         const service = result?.data;
 
         const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-        const title = isAr ? service?.name_ar : service?.name_en;
 
         return {
-            title: `${title} | ${siteName}`,
-            description: isAr ? service?.description_ar : service?.description_en,
+            title: (isAr ? service?.meta_title_ar : service?.meta_title_en) || siteName,
+            description: isAr ? service?.meta_description_ar : service?.meta_description_en,
+            keywords: isAr ? service?.meta_keywords_ar : service?.meta_keywords_en,
+
             openGraph: {
-                title: title,
-                images: [service?.image],
+                title: isAr ? service?.meta_title_ar : service?.meta_title_en,
+                description: isAr ? service?.meta_description_ar : service?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
                 type: 'website',
             },
+
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/services/services-details/${id}`,
+                    'en-US': `/en/services/services-details/${id}`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
         };
     } catch {
         return { title: isAr ? "تفاصيل الخدمة" : "Service Details" };

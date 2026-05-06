@@ -20,34 +20,48 @@ export interface IProject {
 }
 
 // --- 2. SEO Metadata ---
-export async function generateMetadata(): Promise<Metadata> {
-    const locale = await getLocale();
+export async function generateMetadata({ params }: {
+    params: Promise<{ id: string, locale: string }>
+}): Promise<Metadata> {
+    const { locale } = await params;
     const isAr = locale === "ar";
 
-    const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-    const pageTitle = isAr ? "أعمالنا" : "Our Projects";
+    try {
+        const res = await fetch(`https://api.active4web.com/dashboard/section/projects`);
+        const result = await res.json();
+        const data = result?.data?.[0];
 
-    return {
-        title: pageTitle,
-        description: isAr
-            ? "اطّلع على أعمال أكتيف فور ويب واستكشف مشاريعنا في تصميم وتطوير المواقع والتطبيقات، مع تصاميم حديثة وحلول رقمية عالية الأداء."
-            : "Explore Active4Web portfolio and discover our latest web and mobile app development projects with modern designs.",
-        keywords: isAr
-            ? ["مشاريعنا", "معرض الأعمال", "تطوير مواقع", "تطبيقات موبايل", "أكتيف فور ويب"]
-            : ["projects", "portfolio", "web projects", "app development", "Active4Web"],
-        alternates: {
-            languages: {
-                'ar-EG': '/ar/projects',
-                'en-US': '/en/projects',
+        const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
+
+        return {
+            title: (isAr ? data?.meta_title_ar : data?.meta_title_en) || siteName,
+            description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+            keywords: isAr ? data?.meta_keywords_ar : data?.meta_keywords_en,
+
+            openGraph: {
+                title: isAr ? data?.meta_title_ar : data?.meta_title_en,
+                description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
+                type: 'website',
             },
-        },
-        openGraph: {
-            title: `${pageTitle} | ${siteName}`,
-            locale: isAr ? 'ar_EG' : 'en_US',
-            type: 'website',
-            url: `https://active4web.com/${locale}/projects`,
-        }
-    };
+
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/projects`,
+                    'en-US': `/en/projects`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
+        };
+    } catch {
+        return { title: isAr ? "تفاصيل المشروع" : "Project Details" };
+    }
 }
 
 // --- 3. جلب البيانات من الـ API ---

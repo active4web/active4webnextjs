@@ -9,14 +9,10 @@ import Contact from "@/components/Contact/Contact";
 import ProjectSwiper from "@/components/ProjectSwiper/ProjectSwiper";
 
 // --- 1. الـ Metadata مع فك الـ Promise ---
-export async function generateMetadata({
-    params
-}: {
-    params: Promise<{ id: string, locale: string }> // تعريف الـ params كـ Promise
+export async function generateMetadata({ params }: {
+    params: Promise<{ id: string, locale: string }>
 }): Promise<Metadata> {
-    // السطر السحري لحل المشكلة:
     const { id, locale } = await params;
-
     const isAr = locale === "ar";
 
     try {
@@ -25,16 +21,32 @@ export async function generateMetadata({
         const project = result?.data;
 
         const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-        const title = isAr ? project?.name_ar : project?.name_en;
 
         return {
-            title: `${title} | ${siteName}`,
-            description: isAr
-                ? `تعرف على تفاصيل مشروع ${project?.name_ar}`
-                : `Explore details of ${project?.name_en}`,
+            title: (isAr ? project?.meta_title_ar : project?.meta_title_en) || siteName,
+            description: isAr ? project?.meta_description_ar : project?.meta_description_en,
+            keywords: isAr ? project?.meta_keywords_ar : project?.meta_keywords_en,
+
             openGraph: {
-                images: [project?.image],
+                title: isAr ? project?.meta_title_ar : project?.meta_title_en,
+                description: isAr ? project?.meta_description_ar : project?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
+                type: 'website',
             },
+
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/projects/project-details/${id}`,
+                    'en-US': `/en/projects/project-details/${id}`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
         };
     } catch {
         return { title: isAr ? "تفاصيل المشروع" : "Project Details" };

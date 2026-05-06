@@ -15,39 +15,52 @@ export interface IService {
     image: string;
     name_ar: string;
     name_en: string;
-    description_ar?: string; // أضفتها لو هتحتاجها في التفاصيل
+    description_ar?: string;
     description_en?: string;
 }
 
-// --- 1. SEO Metadata ---
-export async function generateMetadata(): Promise<Metadata> {
-    const locale = await getLocale();
+export async function generateMetadata({ params }: {
+    params: Promise<{ id: string, locale: string }>
+}): Promise<Metadata> {
+    const { locale } = await params;
     const isAr = locale === "ar";
 
-    const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-    const pageTitle = isAr ? "خدماتنا" : "Our Services";
+    try {
+        const res = await fetch(`https://api.active4web.com/dashboard/section/services`);
+        const result = await res.json();
+        const data = result?.data?.[0];
 
-    return {
-        title: pageTitle,
-        description: isAr
-            ? "اكتشف مجموعة الخدمات الاحترافية التي تقدمها شركة أكتيف فور ويب، بما في ذلك تطوير المواقع، تطوير التطبيقات، تصميم UX/UI، وتحسين محركات البحث."
-            : "Discover professional services by Active4Web, including web and mobile app development, UX/UI design, and SEO optimization.",
-        keywords: isAr
-            ? ["تطوير مواقع", "تطوير تطبيقات", "تصميم UX/UI", "أكتيف فور ويب", "خدمات برمجية"]
-            : ["web development", "mobile app development", "UX/UI design", "Active4Web", "software services"],
-        alternates: {
-            languages: {
-                'ar-EG': '/ar/services',
-                'en-US': '/en/services',
+        const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
+
+        return {
+            title: (isAr ? data?.meta_title_ar : data?.meta_title_en) || siteName,
+            description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+            keywords: isAr ? data?.meta_keywords_ar : data?.meta_keywords_en,
+
+            openGraph: {
+                title: isAr ? data?.meta_title_ar : data?.meta_title_en,
+                description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
+                type: 'website',
             },
-        },
-        openGraph: {
-            title: `${pageTitle} | ${siteName}`,
-            url: `https://active4web.com/${locale}/services`,
-            siteName: siteName,
-            type: 'website',
-        },
-    };
+
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar/services`,
+                    'en-US': `/en/services`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
+        };
+    } catch {
+        return { title: isAr ? "تفاصيل المشروع" : "Project Details" };
+    }
 }
 
 // --- 2. Data Fetching ---

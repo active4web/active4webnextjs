@@ -4,65 +4,55 @@ import WorkProcess from "@/components/WorkProcess/WorkProcess";
 import ServicesComp from "@/components/HomeComp/ServicesComp/ServicesComp";
 import MarqueeComp from "@/components/Marquee/Marquee";
 import { Metadata } from "next";
-import { getLocale } from "next-intl/server";
 import WhyChoose from "@/components/WhyChoose/WhyChoose";
 import OurProjects from "@/components/HomeComp/OurProjects/OurProjects";
 import OurClient from "@/components/OurClient/OurClient";
 import OurBlogs from "@/components/OurBlogs/OurBlogs";
 import Testimonials from "@/components/Testimonials/Testimonials";
 
-export async function generateMetadata(): Promise<Metadata> {
-    const locale = await getLocale();
+// --- 1. الـ Metadata مع فك الـ Promise ---
+export async function generateMetadata({ params }: {
+    params: Promise<{ id: string, locale: string }>
+}): Promise<Metadata> {
+    const { locale } = await params;
     const isAr = locale === "ar";
 
-    const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
-    const titleSuffix = isAr ? "تطوير مواقع وتطبيقات احترافية" : "Professional Web & App Development";
+    try {
+        const res = await fetch(`https://api.active4web.com/dashboard/section/home`);
+        const result = await res.json();
+        const data = result?.data?.[0];
 
-    return {
-        title: {
-            template: `%s | ${siteName}`,
-            default: `${siteName} | ${titleSuffix}`,
-        },
+        const siteName = isAr ? "أكتيف فور ويب" : "Active4Web";
 
-        description: isAr
-            ? "شركة أكتيف فور ويب تقدم خدمات تطوير مواقع وتطبيقات موبايل عالية الجودة، مع التركيز على الابتكار، تجربة المستخدم، والحلول البرمجية المتكاملة."
-            : "Active4Web provides high-quality web and mobile app development services, focusing on innovation, user experience, and professional software solutions.",
+        return {
+            title: (isAr ? data?.meta_title_ar : data?.meta_title_en) || siteName,
+            description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+            keywords: isAr ? data?.meta_keywords_ar : data?.meta_keywords_en,
 
-        keywords: isAr
-            ? [
-                "تطوير مواقع", "تطوير تطبيقات موبايل", "حلول برمجية",
-                "تصميم UX/UI", "تحسين محركات البحث", "أكتيف فور ويب",
-                "شركة برمجة في مصر", "برمجة تطبيقات"
-            ]
-            : [
-                "web development", "mobile app development", "software solutions",
-                "UX/UI design", "SEO", "Active4Web",
-                "software company Egypt", "nextjs developer"
-            ],
-
-        openGraph: {
-            title: isAr ? "أكتيف فور ويب - ابتكار بلا حدود" : "Active4Web - Innovation Without Limits",
-            description: isAr
-                ? "دليلك لتطوير حلول برمجية ومواقع ذكية تواكب العصر."
-                : "Your guide to developing smart software solutions and modern websites.",
-            url: 'https://active4web.com',
-            siteName: siteName,
-            locale: isAr ? 'ar_EG' : 'en_US',
-            type: 'website',
-        },
-
-        alternates: {
-            languages: {
-                'ar-EG': '/ar',
-                'en-US': '/en',
+            openGraph: {
+                title: isAr ? data?.meta_title_ar : data?.meta_title_en,
+                description: isAr ? data?.meta_description_ar : data?.meta_description_en,
+                url: 'https://active4web.com',
+                siteName: siteName,
+                locale: isAr ? 'ar_EG' : 'en_US',
+                type: 'website',
             },
-        },
 
-        robots: {
-            index: true,
-            follow: true,
-        }
-    };
+            alternates: {
+                languages: {
+                    'ar-EG': `/ar`,
+                    'en-US': `/en`,
+                },
+            },
+
+            robots: {
+                index: true,
+                follow: true,
+            }
+        };
+    } catch {
+        return { title: isAr ? "تفاصيل المشروع" : "Project Details" };
+    }
 }
 
 export default function Home() {
