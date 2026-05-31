@@ -5,6 +5,7 @@ import { getMessages, setRequestLocale } from "next-intl/server";
 import ScrollToTop from "@/components/ScrollToTop/ScrollToTop";
 import Header from "@/components/Header/Header";
 import Footer from "@/components/Footer/Footer";
+import { Metadata } from "next";
 
 const arabicFont = Almarai({
     subsets: ["arabic"],
@@ -23,6 +24,15 @@ async function getSettings() {
         cache: 'no-store'
     });
     return res.json();
+}
+
+export const metadata: Metadata = {
+    title: 'Active4Web',
+    description: 'حلول برمجية متكاملة وتطوير المواقع والتطبيقات',
+    verification: {
+        // كود التحقق الجديد المخصص لموقع go.active4web.com
+        google: '6mAjvxzsMobGEvSAjU75NoMBpR-VflQXtMfScz8wPNY',
+    },
 }
 
 export default async function LocaleLayout({
