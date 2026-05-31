@@ -1,8 +1,7 @@
 import { MetadataRoute } from 'next'
 
-export const revalidate = 86400 // إعادة التحقق والتحديث تلقائياً كل يوم
+export const revalidate = 86400 // التحديث تلقائياً كل يوم
 
-// تعريف الـ Interfaces للبيانات القادمة من الـ API لمنع خطأ any
 interface BaseItem {
     id: number | string
     created_date?: string
@@ -11,7 +10,6 @@ interface BaseItem {
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     const baseUrl = 'https://go.active4web.com'
-    const apiBaseUrl = 'https://api.active4web.com/api'
     const locales = ['en', 'ar']
 
     // الصفحات الثابتة الأساسية
@@ -30,22 +28,27 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
         })
     })
 
-    // دالة مساعدة لجلب البيانات وإضافتها للـ Sitemap لتجنب تكرار الكود
+    // دالة مساعدة مرنة للخدمات والمشاريع (تتعامل مع المصفوفة المباشرة أو كائن data)
     async function fetchAndAddDynamicRoutes(
-        apiUrlPath: string,
+        fullApiUrl: string,
         routePath: string,
         priority: number
     ) {
         try {
-            const response = await fetch(`${apiBaseUrl}/${apiUrlPath}`, {
+            const response = await fetch(fullApiUrl, {
                 next: { revalidate: 86400 }
             })
 
             if (response.ok) {
-                const items: BaseItem[] = await response.json()
+                const resData = await response.json()
 
-                if (Array.isArray(items)) {
-                    items.forEach((item) => {
+                // فحص هل البيانات مصفوفة مباشرة أم بداخل كائن مثل resData.data
+                const items: BaseItem[] = Array.isArray(resData)
+                    ? resData
+                    : (resData && Array.isArray(resData.data) ? resData.data : [])
+
+                items.forEach((item) => {
+                    if (item && item.id) {
                         locales.forEach((locale) => {
                             sitemapEntries.push({
                                 url: `${baseUrl}/${locale}/${routePath}/${item.id}`,
@@ -54,19 +57,24 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
                                 priority: priority,
                             })
                         })
-                    })
-                }
+                    }
+                })
             }
         } catch (error) {
             console.error(`Error fetching dynamic routes for ${routePath}:`, error)
         }
     }
 
-    // 2. جلب وتوليد الروابط الديناميكية بالتوازي لسرعة الـ Build
+    // 2. جلب وتوليد الروابط الديناميكية بالتوازي (مع تخصيص رابط المقالات بالكامل)
     await Promise.all([
-        fetchAndAddDynamicRoutes('services', 'services/services-details', 0.7),
-        fetchAndAddDynamicRoutes('projects', 'projects/project-details', 0.7),
-        fetchAndAddDynamicRoutes('articles', 'blogs/blog-details', 0.7)
+        // الخدمات
+        fetchAndAddDynamicRoutes('https://api.active4web.com/api/services', 'services/services-details', 0.7),
+
+        // الأعمال / المشاريع
+        fetchAndAddDynamicRoutes('https://api.active4web.com/api/projects', 'projects/project-details', 0.7),
+
+        // المقالات (رابط منفصل تماماً عن الـ api الأساسي)
+        fetchAndAddDynamicRoutes('https://api.active4web.com/dashboard/section/blogs', 'blogs/blog-details', 0.7)
     ])
 
     return sitemapEntries
