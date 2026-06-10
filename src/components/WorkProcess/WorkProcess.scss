@@ -25,15 +25,15 @@
 
         .steps {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            grid-template-columns: repeat(auto-fill, minmax(400px, 1fr));
             row-gap: 30px;
             column-gap: 50px;
             margin-top: 50px;
 
             .box {
                 background-color: var(--therd_color);
-                padding-block: 15px;
-                padding-inline: 25px;
+                padding-block: 17px;
+                padding-inline: 27px;
                 border-radius: 25px;
                 display: flex;
                 flex-direction: column;
@@ -47,7 +47,7 @@
 
                 p {
                     font: 15px;
-                    line-height: 1.7;
+                    line-height: 1.8;
                 }
 
                 &::before {
