@@ -76,11 +76,6 @@ const Header = ({ settings }: HeaderProps) => {
                                 <Image src="/icons/instagram.svg" width={18} height={18} alt="instagram" />
                             </a>
                         )}
-                        {/* {contactInfo?.linkedin?.value && (
-                            <a href={contactInfo.linkedin.value} target="_blank" rel="noreferrer">
-                                <Image src="/icons/linkedin.svg" width={18} height={18} alt="linkedin" />
-                            </a>
-                        )} */}
                     </div>
                 </div>
             </div>
