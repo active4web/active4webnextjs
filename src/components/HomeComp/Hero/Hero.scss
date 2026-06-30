@@ -1,3 +1,8 @@
+@use "swiper/css";
+@use "swiper/css/effect-fade";
+@use "swiper/css/pagination";
+
+// ... باقي كود الـ الاستايل بتاعك زي ما هو
 html[dir="rtl"] {
     .hero {
         &::after {
@@ -9,18 +14,43 @@ html[dir="rtl"] {
 .hero {
     height: calc(100vh - 109px);
     position: relative;
+    overflow: hidden;
 
-    &::before {
-        content: "";
+    // الـ Swiper container يأخذ المساحة كاملة
+    .hero-swiper {
         width: 100%;
         height: 100%;
-        background-image: linear-gradient(var(--gradient-dir), #000, #000000d7, #4d4d4d2c);
-        position: absolute;
-        inset-inline-start: 0;
-        top: 0;
-        z-index: 1;
     }
 
+    .hero-slide {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        align-items: center; // يضمن توسيط المحتوى رأسياً
+
+        // تأثير الـ Gradient overlay لكل سلايد
+        &::before {
+            content: "";
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(var(--gradient-dir), #000, #000000d7, #4d4d4d2c);
+            position: absolute;
+            inset-inline-start: 0;
+            top: 0;
+            z-index: 1;
+        }
+    }
+
+    .image-wrapper {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+    }
+
+    // الـ Shape السفلي يظل ثابت فوق السلايدر بالكامل
     &::after {
         content: "";
         max-width: 80%;
@@ -32,13 +62,7 @@ html[dir="rtl"] {
         transform: translateX(-50%);
         bottom: 0;
         border-radius: 15px 15px 0 0;
-        z-index: 2;
-    }
-
-    img {
-        width: 100%;
-        height: 100%;
-        object-fit: cover;
+        z-index: 10; // رفع الـ z-index ليكون فوق الـ Swiper
     }
 
     .box-text {
@@ -85,6 +109,25 @@ html[dir="rtl"] {
             border-radius: 10px;
         }
     }
+
+    // تخصيص نقط الـ Pagination لتتماشى مع الهوية
+    .swiper-pagination-bullet {
+        background: #fff;
+        opacity: 0.5;
+
+        &-active {
+            background: var(--main_color);
+            opacity: 1;
+            width: 20px; // حركة مطاطية بسيطة للنقطة النشطة
+            border-radius: 5px;
+            transition: all 0.3s ease;
+        }
+    }
+
+    .swiper-pagination {
+        bottom: 50px !important;
+        z-index: 9;
+    }
 }
 
 @media (max-width: 850px) {
@@ -96,6 +139,10 @@ html[dir="rtl"] {
             a {
                 padding-top: 12px;
             }
+        }
+
+        .swiper-pagination {
+            bottom: 45px !important;
         }
     }
 }
