@@ -73,7 +73,7 @@ const Hero: React.FC = () => {
                                 </p>
                             )}
 
-                            {slide.title && <h1> dddddddd{slide.title}</h1>}
+                            {slide.title && <h1> {slide.title}</h1>}
 
                             {slide.description && <p>{slide.description}</p>}
 
