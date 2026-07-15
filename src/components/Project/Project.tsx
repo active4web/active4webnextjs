@@ -23,7 +23,6 @@ const Project = ({ data }: ProjectProps) => {
         <div className="project">
             <div className="content">
                 <div className="image">
-                    {/* تحسين عرض الصور باستخدام مكون Next */}
                     <Image
                         src={data.image}
                         alt={`project-${data.id}`}

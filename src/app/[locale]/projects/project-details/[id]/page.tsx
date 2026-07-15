@@ -71,6 +71,8 @@ const ProjectDetailsPage = async ({
     const result = await res.json();
     const project = result?.data;
 
+    console.log(project)
+
     if (!project) return <div>Not Found</div>;
 
     return (
@@ -93,18 +95,18 @@ const ProjectDetailsPage = async ({
                         <div className="info-data">
                             <h3>{isEn ? project.name_en : project.name_ar}</h3>
                             <div className="links">
-                                {project.google_link && (
-                                    <a href={project.google_link} target="_blank">
+                                {project.googplaylink && (
+                                    <a href={project.googplaylink} target="_blank">
                                         <Image src="/icons/Google-Play.png" alt="Google Play" width={160} height={48} />
                                     </a>
                                 )}
-                                {project.store_link && (
-                                    <a href={project.store_link} target="_blank">
+                                {project.ioslink && (
+                                    <a href={project.ioslink} target="_blank">
                                         <Image src="/icons/App-Store.png" alt="App Store" width={160} height={48} />
                                     </a>
                                 )}
-                                {project.website && (
-                                    <a href={project.website} target="_blank">
+                                {project.weblink && (
+                                    <a href={project.weblink} target="_blank">
                                         <Image src="/icons/Website.png" alt="Website" width={160} height={48} />
                                     </a>
                                 )}
@@ -112,11 +114,11 @@ const ProjectDetailsPage = async ({
                         </div>
                     </div>
 
-                    <div className="comments">
-                        {project.infos?.length > 0 && (
+                    {project.infos?.length > 0 && (
+                        <div className="comments">
                             <ProjectSwiper infos={project.infos} locale={locale} />
-                        )}
-                    </div>
+                        </div>
+                    )}
                 </div>
             </section>
 

@@ -24,7 +24,7 @@
                     img {
                         width: 100%;
                         height: 100%;
-                        object-fit: contain;
+                        object-fit: cover;
                     }
                 }
 
@@ -33,6 +33,7 @@
                     padding: 15px 20px;
                     color: #FFF;
                     background-color: var(--main_color);
+                    border-top: 1px solid #FFF;
 
                     h3 {
                         font-size: clamp(17px, 4vw, 22px);
