@@ -8,7 +8,6 @@ import OurClient from "@/components/OurClient/OurClient";
 import Contact from "@/components/Contact/Contact";
 import ProjectSwiper from "@/components/ProjectSwiper/ProjectSwiper";
 
-// --- 1. الـ Metadata مع فك الـ Promise ---
 export async function generateMetadata({ params }: {
     params: Promise<{ id: string, locale: string }>
 }): Promise<Metadata> {
@@ -53,7 +52,6 @@ export async function generateMetadata({ params }: {
     }
 }
 
-// --- 2. المكون الرئيسي مع فك الـ Promise ---
 const ProjectDetailsPage = async ({
     params
 }: {
@@ -64,14 +62,11 @@ const ProjectDetailsPage = async ({
     const locale = await getLocale();
     const isEn = locale === "en";
 
-    // جلب البيانات
     const res = await fetch(`https://api.active4web.com/api/projects/show/${id}`, {
         next: { revalidate: 3600 }
     });
     const result = await res.json();
     const project = result?.data;
-
-    console.log(project)
 
     if (!project) return <div>Not Found</div>;
 
