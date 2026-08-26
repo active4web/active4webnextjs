@@ -17,6 +17,6 @@ export default function robots(): MetadataRoute.Robots {
                 '/.env',
             ],
         },
-        sitemap: 'https://go.active4web.com/sitemap.xml',
+        sitemap: 'https://active4web.com/sitemap.xml',
     }
 }

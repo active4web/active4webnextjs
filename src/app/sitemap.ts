@@ -9,7 +9,7 @@ interface BaseItem {
 }
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-    const baseUrl = 'https://go.active4web.com'
+    const baseUrl = 'https://active4web.com'
     const locales = ['en', 'ar']
 
     // الصفحات الثابتة الأساسية

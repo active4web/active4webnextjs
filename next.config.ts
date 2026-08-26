@@ -2,6 +2,8 @@ import { NextConfig } from 'next';
 import createNextIntlPlugin from 'next-intl/plugin';
 
 const nextConfig: NextConfig = {
+    output: 'standalone',
+
     images: {
         remotePatterns: [
             {
@@ -10,6 +12,21 @@ const nextConfig: NextConfig = {
                 pathname: '**',
             },
         ],
+    },
+
+    async redirects() {
+        return [
+            {
+                source: '/webmail',
+                destination: 'https://webmail.active4web.com',
+                permanent: true,
+            },
+            {
+                source: '/mail',
+                destination: 'https://webmail.active4web.com',
+                permanent: true,
+            },
+        ];
     },
 };
 
